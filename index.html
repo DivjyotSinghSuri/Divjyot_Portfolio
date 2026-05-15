@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Divjyot Singh Suri — Data Engineer & Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white:#FAFAF8; --off:#F3F1ED; --rule:#E4E0D9; --rule-lt:#EDEBE6;
+  --muted:#9E9991; --ink:#1A1916; --navy:#0C1929; --navy2:#182844;
+  --gold:#C5A05C; --gold-lt:#E8D4AC; --gold-bg:#FBF6ED;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',sans-serif; --mono:'DM Mono',monospace;
+  --ez:cubic-bezier(.25,.46,.45,.94); --ezo:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--ink);font-family:var(--sans);font-weight:300;overflow-x:hidden;cursor:none;}
+a{color:inherit;text-decoration:none;}
+
+/* cursor */
+#cur{position:fixed;top:0;left:0;z-index:9999;width:9px;height:9px;background:var(--gold);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s;mix-blend-mode:multiply;}
+#cur.h{width:36px;height:36px;background:transparent;border:1.5px solid var(--gold);mix-blend-mode:normal;}
+@media(max-width:768px){#cur{display:none;}body{cursor:auto;}}
+
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 4rem;transition:background .45s,padding .3s,box-shadow .45s;}
+nav.s{background:rgba(250,250,248,.93);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:1rem 4rem;box-shadow:0 1px 0 var(--rule);}
+.nlogo{font-family:var(--serif);font-size:1.15rem;font-weight:600;letter-spacing:.05em;color:var(--navy);}
+.nlinks{display:flex;gap:2.5rem;list-style:none;}
+.nlinks a{font-size:.76rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .25s;position:relative;}
+.nlinks a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ez);}
+.nlinks a:hover{color:var(--ink);}
+.nlinks a:hover::after{transform:scaleX(1);}
+.ncta{font-size:.74rem;letter-spacing:.11em;text-transform:uppercase;padding:.5rem 1.35rem;border:1px solid var(--navy);color:var(--navy);transition:background .22s,color .22s;}
+.ncta:hover{background:var(--navy);color:var(--white);}
+.nham{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+.nham span{display:block;width:22px;height:1.5px;background:var(--navy);}
+
+/* mobile menu */
+.mmenu{display:none;position:fixed;inset:0;z-index:800;background:var(--white);flex-direction:column;align-items:center;justify-content:center;gap:2.2rem;}
+.mmenu.open{display:flex;}
+.mmenu a{font-family:var(--serif);font-size:2rem;font-weight:300;color:var(--navy);}
+.mmclose{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--navy);}
+
+/* hero */
+#hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:0 4rem;position:relative;overflow:hidden;}
+.hbg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 55% 65% at 85% 45%,rgba(197,160,92,.10) 0%,transparent 65%),radial-gradient(ellipse 35% 50% at 5% 90%,rgba(12,25,41,.04) 0%,transparent 55%);}
+.hdots{position:absolute;inset:0;z-index:0;background-image:radial-gradient(circle,var(--rule) 1px,transparent 1px);background-size:32px 32px;opacity:.55;mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,black 25%,transparent 75%);}
+.hcon{position:relative;z-index:1;}
+
+.hbadge{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;opacity:0;transform:translateY(18px);animation:ri .8s var(--ezo) .15s forwards;}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--gold);position:relative;}
+.pulse::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1px solid var(--gold);animation:pr 2s ease infinite;}
+
+.hname{font-family:var(--serif);font-size:clamp(3.4rem,6.2vw,6rem);font-weight:300;line-height:1.0;color:var(--navy);margin-bottom:.6rem;opacity:0;transform:translateY(28px);animation:ri 1s var(--ezo) .28s forwards;}
+.hname em{font-style:italic;color:var(--gold);}
+.hrole{font-family:var(--serif);font-size:clamp(1.2rem,2.2vw,1.9rem);font-weight:300;color:var(--muted);margin-bottom:2rem;opacity:0;transform:translateY(18px);animation:ri .9s var(--ezo) .44s forwards;}
+.htag{font-size:.93rem;font-weight:300;color:#5E5A54;line-height:1.82;max-width:430px;margin-bottom:2.6rem;padding-left:1.15rem;border-left:2px solid var(--gold);opacity:0;transform:translateY(18px);animation:ri .9s var(--ezo) .58s forwards;}
+.hbtns{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;opacity:0;transform:translateY(18px);animation:ri .9s var(--ezo) .72s forwards;}
+
+.bsolid{display:inline-flex;align-items:center;gap:.55rem;font-size:.76rem;font-weight:400;letter-spacing:.11em;text-transform:uppercase;padding:.85rem 2rem;background:var(--navy);color:var(--white);transition:background .22s,transform .2s;}
+.bsolid svg{transition:transform .25s;}
+.bsolid:hover{background:var(--navy2);transform:translateY(-2px);}
+.bsolid:hover svg{transform:translateX(4px);}
+.bghost{display:inline-flex;align-items:center;gap:.55rem;font-size:.76rem;font-weight:400;letter-spacing:.11em;text-transform:uppercase;padding:.85rem 2rem;border:1px solid var(--rule);color:var(--ink);transition:border-color .22s,color .22s,transform .2s;}
+.bghost:hover{border-color:var(--navy);color:var(--navy);transform:translateY(-2px);}
+
+.hvis{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;opacity:0;animation:fi 1.2s var(--ezo) .5s forwards;}
+.hstack{position:relative;width:310px;height:340px;}
+.hcard{position:absolute;background:var(--white);border:1px solid var(--rule);padding:1.3rem 1.5rem;box-shadow:0 12px 48px rgba(0,0,0,.07);}
+.hcard.c1{top:0;right:0;width:195px;transform:rotate(2.5deg);}
+.hcard.c2{top:90px;left:0;width:200px;transform:rotate(-1.8deg);}
+.hcard.c3{bottom:0;right:10px;width:190px;transform:rotate(1.2deg);}
+.hcnum{font-family:var(--serif);font-size:2.4rem;font-weight:600;color:var(--navy);line-height:1;}
+.hcnum sup{font-size:1.1rem;color:var(--gold);}
+.hclbl{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.3rem;}
+
+.hscroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);z-index:1;animation:fi 1s var(--ezo) 1.3s both;}
+.sstem{width:1px;height:38px;background:linear-gradient(var(--gold),transparent);animation:sp 2.2s ease infinite;}
+
+/* sections */
+section{padding:7rem 4rem;}
+.sh{margin-bottom:3.8rem;}
+.stag{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;}
+.stitle{font-family:var(--serif);font-size:clamp(2.2rem,4vw,3.3rem);font-weight:300;color:var(--navy);line-height:1.1;}
+.stitle em{font-style:italic;}
+.srule{width:44px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-lt));margin-top:1.1rem;}
+
+/* about */
+#about{background:var(--off);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.abgrid{display:grid;grid-template-columns:4fr 8fr;gap:5rem;align-items:start;}
+.avbox{width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;}
+.avfill{position:absolute;inset:0;background:linear-gradient(145deg,#0C1929 0%,#1a3055 55%,#2b4a7a 100%);display:flex;align-items:center;justify-content:center;}
+.avini{font-family:var(--serif);font-size:6.5rem;font-weight:300;color:rgba(255,255,255,.14);letter-spacing:-.04em;user-select:none;}
+.avstripe{position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-lt),transparent);}
+.avtag{position:absolute;bottom:1.4rem;left:1.4rem;background:var(--white);padding:.5rem .85rem;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);}
+.abtxt{font-size:1rem;line-height:1.9;color:#4A4640;margin-bottom:1.5rem;}
+.abmet{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:2.8rem;}
+.amcell{background:var(--white);padding:1.4rem 1.2rem;display:flex;flex-direction:column;gap:.25rem;}
+.amval{font-family:var(--serif);font-size:2.1rem;font-weight:600;color:var(--navy);line-height:1;}
+.amval sup{color:var(--gold);font-size:1.2rem;}
+.amkey{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+
+/* skills */
+.skintro{font-size:.94rem;line-height:1.85;color:#5A5650;max-width:560px;margin-bottom:3.5rem;}
+.sgroups{display:flex;flex-direction:column;gap:2rem;}
+.sgrow{display:grid;grid-template-columns:170px 1fr;gap:1.5rem;align-items:start;padding:1.5rem 0;border-bottom:1px solid var(--rule-lt);}
+.sgrow:last-child{border-bottom:none;}
+.sglbl{font-family:var(--mono);font-size:.67rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding-top:.3rem;line-height:1.6;}
+.sgpills{display:flex;flex-wrap:wrap;gap:.45rem;}
+.pill{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--sans);font-size:.78rem;font-weight:400;padding:.4rem .95rem;border:1px solid var(--rule);color:var(--ink);background:var(--white);transition:border-color .2s,color .2s,background .2s,transform .18s;}
+.pill:hover{border-color:var(--gold);color:var(--navy);background:var(--gold-bg);transform:translateY(-2px);}
+.pill.hi{border-color:var(--gold-lt);background:var(--gold-bg);}
+.pbadge{font-family:var(--mono);font-size:.56rem;letter-spacing:.07em;color:var(--gold);background:var(--white);border:1px solid var(--gold-lt);padding:.1rem .32rem;white-space:nowrap;}
+
+/* projects */
+#projects{background:var(--off);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.pc{background:var(--white);padding:2rem 1.8rem 1.6rem;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .22s;}
+.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ez);}
+.pc:hover{background:#FEFDFB;}
+.pc:hover::before{transform:scaleX(1);}
+.pcnum{font-family:var(--mono);font-size:.63rem;letter-spacing:.15em;color:var(--gold);margin-bottom:1rem;}
+.pctitle{font-family:var(--serif);font-size:1.2rem;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:.65rem;}
+.pcdate{font-family:var(--mono);font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem;}
+.pcdesc{font-size:.86rem;line-height:1.73;color:#5A5650;flex:1;margin-bottom:1rem;}
+.pcstat{font-family:var(--mono);font-size:.7rem;color:var(--gold);padding:.5rem 0;border-top:1px solid var(--rule-lt);margin-bottom:1rem;}
+.pcstack{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.9rem;}
+.ptag{font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;background:var(--navy);color:var(--white);padding:.22rem .6rem;}
+.pclink{display:inline-flex;align-items:center;gap:.4rem;font-size:.73rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:400;transition:gap .22s;margin-top:auto;}
+.pclink:hover{gap:.75rem;}
+
+/* education */
+.edgrid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
+.tl{position:relative;padding-left:2.2rem;}
+.tl::before{content:'';position:absolute;top:8px;bottom:0;left:5px;width:1px;background:linear-gradient(var(--gold) 0%,var(--rule) 100%);}
+.tli{position:relative;margin-bottom:2.8rem;}
+.tli:last-child{margin-bottom:0;}
+.tldot{position:absolute;left:-2.2rem;top:5px;width:11px;height:11px;border-radius:50%;border:2px solid var(--gold);background:var(--white);z-index:1;}
+.tldot.fill{background:var(--gold);}
+.tlwhen{font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;}
+.tlttl{font-family:var(--serif);font-size:1.3rem;font-weight:600;color:var(--navy);margin-bottom:.2rem;}
+.tlsub{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
+.tlbody{font-size:.88rem;line-height:1.73;color:#5A5650;}
+.tlchip{display:inline-block;margin-top:.7rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;padding:.22rem .65rem;border:1px solid var(--gold-lt);color:var(--gold);}
+
+.badges{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:2.5rem;}
+.badge{display:flex;align-items:center;gap:.65rem;padding:.75rem 1rem;background:var(--navy);color:var(--white);font-size:.8rem;font-weight:400;flex:1;min-width:155px;border:1px solid var(--navy);}
+.badge .bi{font-size:1.1rem;}
+.badge .bt small{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;color:var(--gold);margin-top:.05rem;}
+
+.certttl{font-family:var(--serif);font-size:1.4rem;font-weight:300;color:var(--navy);margin-bottom:1.5rem;}
+.certslist{display:flex;flex-direction:column;gap:.7rem;}
+.crow{display:flex;align-items:flex-start;gap:1rem;padding:.9rem 1rem;border:1px solid var(--rule);background:var(--white);transition:border-color .22s,background .22s;}
+.crow:hover{border-color:var(--gold-lt);background:var(--gold-bg);}
+.cico{width:34px;height:34px;flex-shrink:0;background:var(--off);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+.cname{font-family:var(--serif);font-size:.96rem;font-weight:600;color:var(--navy);line-height:1.25;}
+.corg{font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:.12rem;}
+.cwhen{margin-left:auto;align-self:center;flex-shrink:0;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;color:var(--gold);text-align:right;padding-left:.8rem;}
+
+/* contact */
+#contact{background:var(--navy);border-top:1px solid rgba(255,255,255,.07);}
+#contact .stag{color:var(--gold);}
+#contact .stitle{color:var(--white);}
+#contact .srule{background:var(--gold);}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
+.ccopy{font-size:.95rem;line-height:1.82;color:rgba(255,255,255,.48);margin:1.2rem 0 2.2rem;}
+.clinks{display:flex;flex-direction:column;gap:.7rem;}
+.clrow{display:flex;align-items:center;gap:.9rem;padding:.8rem 1rem;border:1px solid rgba(255,255,255,.09);transition:background .22s,border-color .22s;}
+.clrow:hover{background:rgba(197,160,92,.08);border-color:rgba(197,160,92,.3);}
+.clico{width:34px;height:34px;flex-shrink:0;background:rgba(197,160,92,.12);display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--gold);font-family:var(--mono);font-weight:500;}
+.cllbl{font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.1rem;}
+.clval{font-size:.86rem;color:rgba(255,255,255,.7);}
+.cform{border:1px solid rgba(255,255,255,.1);padding:2.5rem;}
+.cftitle{font-family:var(--serif);font-size:1.5rem;font-weight:300;color:var(--white);margin-bottom:1.8rem;}
+.cff{margin-bottom:1.1rem;}
+.cff label{display:block;font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:.45rem;}
+.cff input,.cff textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.11);color:var(--white);font-family:var(--sans);font-size:.88rem;font-weight:300;padding:.8rem .95rem;outline:none;resize:none;transition:border-color .22s;}
+.cff input:focus,.cff textarea:focus{border-color:var(--gold);}
+.cff input::placeholder,.cff textarea::placeholder{color:rgba(255,255,255,.2);}
+.cfbtn{display:inline-flex;align-items:center;gap:.55rem;font-size:.75rem;font-weight:500;letter-spacing:.13em;text-transform:uppercase;padding:.88rem 2rem;background:var(--gold);color:var(--navy);border:none;cursor:none;transition:background .22s,transform .18s;}
+.cfbtn:hover{background:#d4b06b;transform:translateY(-2px);}
+.cfnote{font-size:.67rem;color:rgba(255,255,255,.28);margin-top:.7rem;font-style:italic;}
+
+footer{background:#07111C;padding:1.8rem 4rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,.04);}
+footer p{font-size:.7rem;letter-spacing:.05em;color:rgba(255,255,255,.22);}
+.ftlogo{font-family:var(--serif);font-size:1rem;font-weight:600;color:rgba(255,255,255,.3);}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .85s var(--ezo),transform .85s var(--ezo);}
+.rv.in{opacity:1;transform:none;}
+.d1{transition-delay:.1s;} .d2{transition-delay:.2s;} .d3{transition-delay:.3s;} .d4{transition-delay:.4s;}
+
+@keyframes ri{to{opacity:1;transform:none;}}
+@keyframes fi{to{opacity:1;}}
+@keyframes pr{0%,100%{transform:scale(1);opacity:.6;}50%{transform:scale(1.8);opacity:0;}}
+@keyframes sp{0%,100%{opacity:.4;transform:scaleY(1);}50%{opacity:1;transform:scaleY(1.15);}}
+
+/* responsive */
+@media(max-width:1100px){
+  nav,nav.s{padding-left:2rem;padding-right:2rem;}
+  section{padding:5.5rem 2rem;}
+  #hero{grid-template-columns:1fr;padding:6.5rem 2rem 4rem;min-height:auto;}
+  .hvis{display:none;}
+  .abgrid{grid-template-columns:1fr;gap:2.5rem;}
+  .ableft{max-width:260px;}
+  .pgrid{grid-template-columns:1fr 1fr;}
+  .edgrid{grid-template-columns:1fr;gap:3rem;}
+  .cgrid{grid-template-columns:1fr;gap:2.5rem;}
+}
+@media(max-width:700px){
+  nav,nav.s{padding-left:1.2rem;padding-right:1.2rem;}
+  .nlinks,.ncta{display:none;}
+  .nham{display:flex;}
+  section{padding:4rem 1.2rem;}
+  #hero{padding:5.5rem 1.2rem 3rem;}
+  .pgrid{grid-template-columns:1fr;}
+  .abmet{grid-template-columns:1fr 1fr;}
+  .sgrow{grid-template-columns:1fr;gap:.6rem;}
+  .cform{padding:1.5rem;}
+  footer{flex-direction:column;gap:.5rem;text-align:center;padding:1.5rem 1.2rem;}
+  .badges{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+
+<div class="mmenu" id="mm">
+  <button class="mmclose" onclick="document.getElementById('mm').classList.remove('open')">✕</button>
+  <a href="#about"     onclick="document.getElementById('mm').classList.remove('open')">About</a>
+  <a href="#skills"    onclick="document.getElementById('mm').classList.remove('open')">Skills</a>
+  <a href="#projects"  onclick="document.getElementById('mm').classList.remove('open')">Projects</a>
+  <a href="#education" onclick="document.getElementById('mm').classList.remove('open')">Education</a>
+  <a href="#contact"   onclick="document.getElementById('mm').classList.remove('open')">Contact</a>
+</div>
+
+<nav id="nav">
+  <div class="nlogo">DSS</div>
+  <ul class="nlinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="ncta">Hire Me</a>
+  <div class="nham" onclick="document.getElementById('mm').classList.add('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hbg"></div>
+  <div class="hdots"></div>
+  <div class="hcon">
+    <div class="hbadge"><span class="pulse"></span>Open to Opportunities · Delhi NCR, India</div>
+    <h1 class="hname">Divjyot<br><em>Singh Suri</em></h1>
+    <p class="hrole">Data Engineer &amp; Analytics Engineer</p>
+    <p class="htag">I engineer the data infrastructure that makes great analysis possible — production-grade pipelines, dimensional models, and cloud systems that turn raw data into decisions teams can trust.</p>
+    <div class="hbtns">
+      <a href="#projects" class="bsolid">Explore Work <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3l3.5 3.5L7.5 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="https://github.com/DivjyotSinghSuri" target="_blank" class="bghost">GitHub Profile</a>
+    </div>
+  </div>
+  <div class="hvis">
+    <div class="hstack">
+      <div class="hcard c1">
+        <div class="hcnum">5<sup>+</sup></div>
+        <div class="hclbl">Live Projects</div>
+      </div>
+      <div class="hcard c2">
+        <div class="hcnum">180<sup>K</sup></div>
+        <div class="hclbl">Records Processed</div>
+      </div>
+      <div class="hcard c3">
+        <div class="hcnum" style="font-size:1.5rem;">★★★★★</div>
+        <div class="hclbl">HackerRank SQL</div>
+      </div>
+    </div>
+  </div>
+  <div class="hscroll"><div class="sstem"></div>Scroll</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sh rv">
+    <div class="stag">01 — Profile</div>
+    <h2 class="stitle">About <em>Me</em></h2>
+    <div class="srule"></div>
+  </div>
+  <div class="abgrid">
+    <div class="ableft rv d1">
+      <div class="avbox">
+        <div class="avfill"><div class="avini">DS</div></div>
+        <div class="avstripe"></div>
+        <div class="avtag">Delhi NCR, India 🇮🇳</div>
+      </div>
+    </div>
+    <div class="rv d2">
+      <p class="abtxt">I'm a data professional who builds structured, reproducible data workflows — the kind that turn messy raw datasets into reliable, analytics-ready models teams can actually trust. My focus is clean transformations, well-defined metrics, and data infrastructure designed for downstream use.</p>
+      <p class="abtxt">I approach every project with an engineering mindset: layered Bronze–Silver–Gold architectures, version-controlled transformations, and practical cloud integration on AWS and Databricks. From serverless event-driven pipelines to dimensional star-schema models to Prophet-based demand forecasting, I own the full data lifecycle.</p>
+      <p class="abtxt">Currently pursuing B.Tech in Information Technology at ABES Engineering College, Ghaziabad (Expected June 2027). Actively seeking data engineering and analytics engineering internships.</p>
+      <div class="abmet">
+        <div class="amcell">
+          <div class="amval">5<sup>+</sup></div>
+          <div class="amkey">Projects Built</div>
+        </div>
+        <div class="amcell">
+          <div class="amval">★★★★★</div>
+          <div class="amkey">HackerRank SQL</div>
+        </div>
+        <div class="amcell">
+          <div class="amval">50<sup>✓</sup></div>
+          <div class="amkey">LeetCode SQL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="sh rv">
+    <div class="stag">02 — Expertise</div>
+    <h2 class="stitle">Technical <em>Skills</em></h2>
+    <div class="srule"></div>
+  </div>
+  <p class="skintro rv d1">Proficient across the modern data stack — from ingestion and pipeline orchestration to cloud infrastructure, dimensional modelling, and BI. Skills sourced from hands-on project work across AWS, Databricks, BigQuery, and Python.</p>
+  <div class="sgroups rv d2">
+
+    <div class="sgrow">
+      <div class="sglbl">Languages<br>&amp; Query</div>
+      <div class="sgpills">
+        <span class="pill hi">SQL (Advanced) <span class="pbadge">★★★★★ HackerRank</span></span>
+        <span class="pill hi">Python <span class="pbadge">Core Language</span></span>
+        <span class="pill">Pandas</span>
+        <span class="pill">NumPy</span>
+        <span class="pill">MS Excel</span>
+        <span class="pill">Jupyter Notebook</span>
+      </div>
+    </div>
+
+    <div class="sgrow">
+      <div class="sglbl">Data<br>Engineering</div>
+      <div class="sgpills">
+        <span class="pill hi">Databricks <span class="pbadge">Notebooks + Workflows</span></span>
+        <span class="pill">dbt</span>
+        <span class="pill">Spark SQL</span>
+        <span class="pill">ELT Pipeline Design</span>
+        <span class="pill">Medallion Architecture</span>
+        <span class="pill">Bronze–Silver–Gold</span>
+        <span class="pill">n8n (Automation)</span>
+      </div>
+    </div>
+
+    <div class="sgrow">
+      <div class="sglbl">Cloud &amp;<br>Infrastructure</div>
+      <div class="sgpills">
+        <span class="pill hi">AWS S3 <span class="pbadge">Partitioned Parquet</span></span>
+        <span class="pill">AWS Glue (Visual ETL)</span>
+        <span class="pill">AWS Lambda</span>
+        <span class="pill">AWS Athena</span>
+        <span class="pill">AWS Redshift</span>
+        <span class="pill">CloudWatch + SNS</span>
+        <span class="pill">IAM</span>
+        <span class="pill">BigQuery</span>
+      </div>
+    </div>
+
+    <div class="sgrow">
+      <div class="sglbl">Data Modelling<br>&amp; Quality</div>
+      <div class="sgpills">
+        <span class="pill hi">Dimensional Modelling <span class="pbadge">Star Schema</span></span>
+        <span class="pill">Fact &amp; Dimension Tables</span>
+        <span class="pill">Grain Contracts</span>
+        <span class="pill">Surrogate Keys</span>
+        <span class="pill">OBT Decomposition</span>
+        <span class="pill">Schema Enforcement</span>
+        <span class="pill">Null / Duplicate Validation</span>
+        <span class="pill">Failure Alerting</span>
+      </div>
+    </div>
+
+    <div class="sgrow">
+      <div class="sglbl">Analytics<br>&amp; BI</div>
+      <div class="sgpills">
+        <span class="pill hi">Tableau <span class="pbadge">KPI Dashboards</span></span>
+        <span class="pill">Window Functions (RANK, LAG)</span>
+        <span class="pill">CTEs</span>
+        <span class="pill">Prophet (Forecasting)</span>
+        <span class="pill">KPI Design</span>
+        <span class="pill">Excel PivotTables</span>
+      </div>
+    </div>
+
+    <div class="sgrow">
+      <div class="sglbl">Tools &amp;<br>Workflow</div>
+      <div class="sgpills">
+        <span class="pill">Git / GitHub</span>
+        <span class="pill">Jira</span>
+        <span class="pill">LucidChart</span>
+        <span class="pill">Hadoop Ecosystem</span>
+        <span class="pill">MapReduce</span>
+        <span class="pill">VS Code</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="sh rv">
+    <div class="stag">03 — Work</div>
+    <h2 class="stitle">Featured <em>Projects</em></h2>
+    <div class="srule"></div>
+  </div>
+  <div class="pgrid">
+
+    <div class="pc rv d1">
+      <div class="pcnum">01</div>
+      <h3 class="pctitle">FMCG Analytics Pipeline &amp; Reporting Layer</h3>
+      <div class="pcdate">December 2025</div>
+      <p class="pcdesc">Multi-stage ELT pipeline ingesting raw FMCG data from S3 into Databricks with Bronze–Silver–Gold layering. Star schema covers sales, customers, products and pricing with grain-level contracts, eliminating metric ambiguity across 4+ reporting use cases. Automated daily schedules with failure alerting.</p>
+      <div class="pcstat">↓ 35% query prep time · ↓ 3 hrs/wk manual monitoring</div>
+      <div class="pcstack"><span class="ptag">Databricks</span><span class="ptag">Spark SQL</span><span class="ptag">S3</span><span class="ptag">Star Schema</span></div>
+      <a href="https://github.com/DivjyotSinghSuri/databricks-fmcg-data-engineering-pipeline" target="_blank" class="pclink">View Repo →</a>
+    </div>
+
+    <div class="pc rv d2">
+      <div class="pcnum">02</div>
+      <h3 class="pctitle">AWS Serverless Orders Data Lake</h3>
+      <div class="pcdate">2025</div>
+      <p class="pcdesc">Event-driven pipeline with a Lambda validation gate that rejects corrupt files before compute, Glue Visual ETL transforms data to partitioned Parquet in the curated layer, and Athena serves as the query layer. CloudWatch + SNS ensures zero silent failures across all pipeline stages.</p>
+      <div class="pcstat">3-tier S3 lake (raw→clean→curated) · Parquet partitioned by order_date</div>
+      <div class="pcstack"><span class="ptag">Lambda</span><span class="ptag">Glue ETL</span><span class="ptag">S3</span><span class="ptag">Athena</span><span class="ptag">CloudWatch</span></div>
+      <a href="https://github.com/DivjyotSinghSuri/aws-serverless-orders-data-lake" target="_blank" class="pclink">View Repo →</a>
+    </div>
+
+    <div class="pc rv d3">
+      <div class="pcnum">03</div>
+      <h3 class="pctitle">Supply Chain Performance &amp; Sales Forecasting</h3>
+      <div class="pcdate">September 2025</div>
+      <p class="pcdesc">End-to-end analysis of 180K+ supply chain records from raw CSV through BigQuery transformations to Tableau dashboards. Reusable CTEs and window functions standardise KPIs across 6+ dimensions. A Python Prophet model supports inventory planning decisions.</p>
+      <div class="pcstat">↓ 40% MoM calc time · 180K+ records processed</div>
+      <div class="pcstack"><span class="ptag">BigQuery</span><span class="ptag">Python</span><span class="ptag">Prophet</span><span class="ptag">Tableau</span></div>
+      <a href="https://github.com/DivjyotSinghSuri/Supply-Chain-Efficiency-Sales-Forecasting" target="_blank" class="pclink">View Repo →</a>
+    </div>
+
+    <div class="pc rv d1">
+      <div class="pcnum">04</div>
+      <h3 class="pctitle">EIA Energy Data Pipeline</h3>
+      <div class="pcdate">2025</div>
+      <p class="pcdesc">Automated pipeline ingesting energy generation data from the EIA Open API into AWS S3 using medallion architecture (Bronze → Silver). Partitioned Parquet files stored by year/month/day with null checks, schema consistency validation, and domain-aware cleaning for generation vs. interchange metrics.</p>
+      <div class="pcstat">API-to-S3 automated ingestion · Domain-aware validation</div>
+      <div class="pcstack"><span class="ptag">Python</span><span class="ptag">AWS S3</span><span class="ptag">Athena</span><span class="ptag">Pandas</span></div>
+      <a href="https://github.com/DivjyotSinghSuri" target="_blank" class="pclink">View Repo →</a>
+    </div>
+
+    <div class="pc rv d2">
+      <div class="pcnum">05</div>
+      <h3 class="pctitle">Logistics Fulfillment Data Model</h3>
+      <div class="pcdate">February 2026</div>
+      <p class="pcdesc">Decomposed a flat one-big-table (OBT) into a normalised analytical model with a clearly defined grain — one row per item per order. Surrogate-key-based dimension tables and a procedural fact table cover the full fulfillment lifecycle. End-to-end SQL validates join integrity and aggregation accuracy.</p>
+      <div class="pcstat">↑ 30% query efficiency · Full order lifecycle coverage</div>
+      <div class="pcstack"><span class="ptag">Databricks SQL</span><span class="ptag">Dim Modelling</span><span class="ptag">LucidChart</span></div>
+      <a href="https://github.com/DivjyotSinghSuri/logistics-fulfillment-data-model" target="_blank" class="pclink">View Repo →</a>
+    </div>
+
+    <div class="pc rv d3">
+      <div class="pcnum">06</div>
+      <h3 class="pctitle">Data Visualisation &amp; Excel Analytics Portfolio</h3>
+      <div class="pcdate">Ongoing</div>
+      <p class="pcdesc">Two companion repos showcasing data storytelling. The visualisation portfolio contains Tableau dashboards built to surface trends from real-world datasets. The Excel collection demonstrates PivotTables, VLOOKUP, conditional formatting and KPI dashboards applied to practical business scenarios.</p>
+      <div class="pcstat">Tableau + Excel · Business KPI storytelling</div>
+      <div class="pcstack"><span class="ptag">Tableau</span><span class="ptag">Excel</span><span class="ptag">Data Storytelling</span></div>
+      <a href="https://github.com/DivjyotSinghSuri/Data_visualisationProjects" target="_blank" class="pclink">View Repos →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="sh rv">
+    <div class="stag">04 — Background</div>
+    <h2 class="stitle">Education &amp; <em>Credentials</em></h2>
+    <div class="srule"></div>
+  </div>
+  <div class="edgrid">
+
+    <div class="rv d1">
+      <div class="tl">
+        <div class="tli">
+          <div class="tldot fill"></div>
+          <div class="tlwhen">Expected June 2027</div>
+          <div class="tlttl">B.Tech — Information Technology</div>
+          <div class="tlsub">ABES Engineering College, Ghaziabad</div>
+          <div class="tlbody">Specialising in data systems, distributed computing, and software engineering principles. Complementing coursework with end-to-end industry-grade data projects covering the full analytics engineering stack — from cloud ingestion to BI dashboards.</div>
+          <div class="tlchip">CGPA: 7.63 / 10.0</div>
+        </div>
+      </div>
+      <div style="margin-top:2.5rem;">
+        <div class="stag" style="margin-bottom:1rem;">Competitive Programming</div>
+        <div class="badges">
+          <div class="badge">
+            <span class="bi">⭐</span>
+            <div class="bt">HackerRank SQL<small>5 Stars — Verified Badge</small></div>
+          </div>
+          <div class="badge">
+            <span class="bi">🟡</span>
+            <div class="bt">LeetCode SQL 50<small>All 50 problems completed</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rv d2">
+      <div class="certttl">Courses &amp; Certifications</div>
+      <div class="certslist">
+        <div class="crow">
+          <div class="cico">📊</div>
+          <div><div class="cname">Meta Data Analyst Professional Certificate</div><div class="corg">Coursera — Meta</div></div>
+          <div class="cwhen">Jul 2025</div>
+        </div>
+        <div class="crow">
+          <div class="cico">🎓</div>
+          <div><div class="cname">Big Data Computing</div><div class="corg">NPTEL — IIT Kanpur</div></div>
+          <div class="cwhen">Nov 2025</div>
+        </div>
+        <div class="crow">
+          <div class="cico">☁️</div>
+          <div><div class="cname">AWS Academy Cloud Architecting</div><div class="corg">Amazon Web Services</div></div>
+          <div class="cwhen">Trained</div>
+        </div>
+        <div class="crow">
+          <div class="cico">📗</div>
+          <div><div class="cname">Excel Essentials for Data Analysis</div><div class="corg">Coursera — IBM</div></div>
+          <div class="cwhen">2025</div>
+        </div>
+        <div class="crow">
+          <div class="cico">⭐</div>
+          <div><div class="cname">SQL — 5 Star Badge</div><div class="corg">HackerRank</div></div>
+          <div class="cwhen">Verified</div>
+        </div>
+        <div class="crow">
+          <div class="cico">🟡</div>
+          <div><div class="cname">SQL 50 Study Plan</div><div class="corg">LeetCode</div></div>
+          <div class="cwhen">Completed</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sh rv">
+    <div class="stag">05 — Let's Talk</div>
+    <h2 class="stitle">Get In <em>Touch</em></h2>
+    <div class="srule"></div>
+  </div>
+  <div class="cgrid">
+    <div class="rv d1">
+      <p class="ccopy">I'm actively looking for data engineering and analytics engineering opportunities. If you're building something data-intensive, need someone who can own the pipeline end-to-end, or just want to talk shop — reach out.</p>
+      <div class="clinks">
+        <a href="mailto:suri.divjyot@gmail.com" class="clrow">
+          <div class="clico">@</div>
+          <div><span class="cllbl">Email</span><span class="clval">suri.divjyot@gmail.com</span></div>
+        </a>
+        <a href="https://www.linkedin.com/in/divjyot-singhsuri/" target="_blank" class="clrow">
+          <div class="clico" style="font-size:.7rem;font-weight:600;">in</div>
+          <div><span class="cllbl">LinkedIn</span><span class="clval">in/divjyot-singhsuri</span></div>
+        </a>
+        <a href="https://github.com/DivjyotSinghSuri" target="_blank" class="clrow">
+          <div class="clico">GH</div>
+          <div><span class="cllbl">GitHub</span><span class="clval">DivjyotSinghSuri</span></div>
+        </a>
+        <a href="tel:+919990033494" class="clrow">
+          <div class="clico">☎</div>
+          <div><span class="cllbl">Phone</span><span class="clval">+91 99900 33494</span></div>
+        </a>
+      </div>
+    </div>
+    <div class="cform rv d2">
+      <div class="cftitle">Send a message</div>
+      <div class="cff"><label>Your Name</label><input type="text" placeholder="Jane Smith"></div>
+      <div class="cff"><label>Email Address</label><input type="email" placeholder="jane@company.com"></div>
+      <div class="cff"><label>Subject</label><input type="text" placeholder="Internship / Collaboration"></div>
+      <div class="cff"><label>Message</label><textarea rows="4" placeholder="Tell me about the role or project..."></textarea></div>
+      <button class="cfbtn" onclick="sendMsg(this)">Send Message <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3l3.5 3.5L7.5 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <p class="cfnote">Typically responds within 24 hours.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ftlogo">Divjyot Singh Suri</div>
+  <p>© 2026 · Crafted with care. Delhi NCR, India.</p>
+  <p style="font-family:var(--mono);font-size:.62rem;color:rgba(255,255,255,.18);">Data Engineer · Analytics</p>
+</footer>
+
+<script>
+// cursor
+const c=document.getElementById('cur');
+document.addEventListener('mousemove',e=>{c.style.left=e.clientX+'px';c.style.top=e.clientY+'px';});
+document.querySelectorAll('a,button,.pc,.crow,.clrow,.pill').forEach(el=>{
+  el.addEventListener('mouseenter',()=>c.classList.add('h'));
+  el.addEventListener('mouseleave',()=>c.classList.remove('h'));
+});
+
+// navbar
+const nv=document.getElementById('nav');
+window.addEventListener('scroll',()=>nv.classList.toggle('s',scrollY>50));
+
+// reveal
+const ob=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ob.unobserve(e.target);}}),{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>ob.observe(el));
+
+// active nav
+const secs=document.querySelectorAll('section[id]');
+const lks=document.querySelectorAll('.nlinks a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{if(scrollY>=s.offsetTop-220)cur=s.id;});
+  lks.forEach(a=>{a.style.color=a.getAttribute('href')==='#'+cur?'var(--ink)':'';});
+});
+
+// form
+function sendMsg(btn){
+  const og=btn.innerHTML;btn.disabled=true;btn.innerHTML='Sending…';
+  setTimeout(()=>{btn.innerHTML='Sent ✓';btn.style.background='#4a7c5a';},1200);
+  setTimeout(()=>{btn.innerHTML=og;btn.style.background='';btn.disabled=false;},3500);
+}
+</script>
+</body>
+</html>
