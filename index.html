@@ -443,12 +443,12 @@ footer p{font-size:.7rem;letter-spacing:.05em;color:rgba(255,255,255,.22);}
 
     <div class="pc rv d1">
       <div class="pcnum">04</div>
-      <h3 class="pctitle">EIA Energy API → S3 Medallion Pipeline</h3>
-      <div class="pcdate">2025</div>
-      <p class="pcdesc"><strong style="color:var(--navy);font-weight:500;">Problem:</strong> EIA energy generation data is published via API with mixed metric types (generation vs. interchange) that break naive ingestion — null values and schema drift are common. <strong style="color:var(--navy);font-weight:500;">Approach:</strong> Built a Python pipeline that pulls from the EIA Open API, applies domain-aware cleaning (separating generation from interchange rows before writing), validates nulls and schema consistency, then writes time-partitioned Parquet to S3 Bronze and Silver layers. <strong style="color:var(--navy);font-weight:500;">Outcome:</strong> Clean, queryable energy dataset in S3; structured for downstream Athena analytics.</p>
-      <div class="pcstat">API → S3 Bronze/Silver · Year/month/day partitioning · Domain-aware validation</div>
-      <div class="pcstack"><span class="ptag">Python</span><span class="ptag">AWS S3</span><span class="ptag">Athena</span><span class="ptag">Pandas</span><span class="ptag">EIA API</span></div>
-      <a href="https://github.com/DivjyotSinghSuri" target="_blank" class="pclink">View Repo →</a>
+      <h3 class="pctitle">EIA Energy API → S3 Medallion Pipeline <span style="font-family:var(--mono);font-size:.6rem;color:var(--gold);border:1px solid var(--gold-lt);padding:.1rem .4rem;vertical-align:middle;margin-left:.4rem;">In Progress</span></h3>
+      <div class="pcdate">2025 — Active</div>
+      <p class="pcdesc"><strong style="color:var(--navy);font-weight:500;">Problem:</strong> EIA energy data arrives from the Open API with mixed metric types — net generation and interchange in the same response — causing negative values, schema inconsistencies, and broken aggregations if ingested naively. <strong style="color:var(--navy);font-weight:500;">Approach:</strong> Python pipeline (Boto3 + Pandas) fetches from the EIA API, validates nulls and type consistency, removes invalid negative generation values, drops redundant columns, then writes time-partitioned Parquet to S3 Bronze (raw) and Silver (cleaned) layers. Gold layer analytical queries are in development using SQL (Athena / DuckDB) targeting regional production trends and import/export dependency analysis. <strong style="color:var(--navy);font-weight:500;">Status:</strong> Bronze + Silver complete and in S3. Gold layer SQL (gold.sql) in progress.</p>
+      <div class="pcstat">Bronze + Silver live in S3 · Parquet partitioned year/month/day · Gold layer in progress</div>
+      <div class="pcstack"><span class="ptag">Python</span><span class="ptag">Boto3</span><span class="ptag">AWS S3</span><span class="ptag">Pandas</span><span class="ptag">Parquet</span><span class="ptag">EIA API</span></div>
+      <a href="https://github.com/DivjyotSinghSuri/eia-energy-data-pipeline" target="_blank" class="pclink">View Repo →</a>
     </div>
 
     <div class="pc rv d2">
