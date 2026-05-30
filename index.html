@@ -382,7 +382,7 @@ footer p{font-size:.7rem;letter-spacing:.05em;color:rgba(255,255,255,.22);}
         <span class="pill hi">Medallion Architecture <span class="pbadge">Bronze → Silver → Gold</span></span>
         <span class="pill">ELT Pipeline Design</span>
         <span class="pill">Incremental + Full Ingestion</span>
-        <span class="pill">dbt</span>
+        <span class="pill hi">dbt <span class="pbadge">Olist Pipeline · Snowflake</span></span>
         <span class="pill">n8n</span>
       </div>
     </div>
@@ -396,6 +396,7 @@ footer p{font-size:.7rem;letter-spacing:.05em;color:rgba(255,255,255,.22);}
         <span class="pill">Athena — Query Layer</span>
         <span class="pill">CloudWatch + SNS Alerts</span>
         <span class="pill">IAM · Redshift</span>
+        <span class="pill hi">Snowflake <span class="pbadge">Olist Pipeline</span></span>
         <span class="pill">BigQuery</span>
       </div>
     </div>
@@ -495,12 +496,12 @@ footer p{font-size:.7rem;letter-spacing:.05em;color:rgba(255,255,255,.22);}
 
     <div class="pc rv d3">
       <div class="pcnum">06</div>
-      <h3 class="pctitle">Tableau &amp; Excel Analytics — BI Portfolio</h3>
-      <div class="pcdate">Ongoing</div>
-      <p class="pcdesc"><strong style="color:var(--navy);font-weight:500;">Focus:</strong> Analytical layer work — dashboards and reports built on top of cleaned datasets to validate that the pipeline output is actually usable by stakeholders. Tableau dashboards cover supply chain KPIs, regional revenue trends, and delivery SLA tracking. Excel workbooks demonstrate PivotTable analysis, dynamic charting, and KPI summary views for business users who don't query SQL. This is the last mile of analytics engineering — ensuring the data lands correctly.</p>
-      <div class="pcstat">Tableau KPI dashboards · Excel analytics workbooks · Business-ready outputs</div>
-      <div class="pcstack"><span class="ptag">Tableau</span><span class="ptag">Excel</span><span class="ptag">KPI Design</span><span class="ptag">BI</span></div>
-      <a href="https://github.com/DivjyotSinghSuri/Data_visualisationProjects" target="_blank" class="pclink">View Repos →</a>
+      <h3 class="pctitle">Olist E-Commerce Analytics Pipeline — dbt + Snowflake</h3>
+      <div class="pcdate">2025</div>
+      <p class="pcdesc"><strong style="color:var(--navy);font-weight:500;">Problem:</strong> Raw Brazilian e-commerce data (Olist) across 9 CSVs in S3 had no transformation layer — joins were duplicating rows, AOV calculations were incorrect, and no agreed mart existed for daily metrics. <strong style="color:var(--navy);font-weight:500;">Approach:</strong> Built a full analytics engineering stack: S3 → Snowflake raw → dbt staging (cleaned, typed) → <code style="font-family:var(--mono);font-size:.8em;">fact_orders</code> (grain: one row per order, aggregating payments via SUM to avoid fan-out) → <code style="font-family:var(--mono);font-size:.8em;">mart_daily_metrics</code> (grain: one row per day). Used a custom <code style="font-family:var(--mono);font-size:.8em;">safe_divide</code> macro for null-safe AOV. dbt tests enforce uniqueness and not_null on critical columns. Surfaced in a Tableau Public dashboard. <strong style="color:var(--navy);font-weight:500;">Outcome:</strong> Reliable revenue, order, and delivery KPIs — uncovered seasonal revenue spike in late 2017 and stable AOV of ~150–180 BRL.</p>
+      <div class="pcstat">S3 → Snowflake → dbt (Staging + Fact + Marts) → Tableau · Grain-enforced at every layer</div>
+      <div class="pcstack"><span class="ptag">dbt</span><span class="ptag">Snowflake</span><span class="ptag">AWS S3</span><span class="ptag">SQL + Jinja</span><span class="ptag">Tableau</span></div>
+      <a href="https://github.com/DivjyotSinghSuri/olist-analytics-pipeline" target="_blank" class="pclink">View Repo →</a>
     </div>
 
   </div>
